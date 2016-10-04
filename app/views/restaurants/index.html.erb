@@ -17,7 +17,8 @@
         <%= link_to "Review #{restaurant.name}", new_restaurant_review_path(restaurant) %>
         <h3><% reviews = restaurant.reviews %></h3>
         <% reviews.each do |review| %>
-        <h3><%= review.thoughts %></h3>
+        <h3>Thoughts: <%= review.thoughts %></h3>
+        <h3>Rating:<%= review.rating %></h3>
           <% end %>
     <% end %>
       <% else %>
