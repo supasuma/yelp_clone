@@ -13,13 +13,18 @@
         <h3><%= restaurant.description %></h3>
         <%= link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant) %>
         <%= link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete %>
+        <%= link_to "Review #{restaurant.name}", new_restaurant_review_path(restaurant) %>
+        <h3><% reviews = restaurant.reviews %></h3>
+        <% reviews.each do |review| %>
+        <h3><%= review.thoughts %></h3>
+          <% end %>
     <% end %>
       <% else %>
       <h1>No restaurants yet</h1>
     <% end %>
 
     <%= link_to "Add a restaurant", new_restaurant_path %>
-    <!-- <a href="/restaurants/new">Add a restaurant</a> -->
+
 
   </body>
 </html>
