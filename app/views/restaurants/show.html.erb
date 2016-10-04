@@ -1,2 +1,14 @@
 <p><%= @restaurant.name %></p>
+
+
 <p><%= @restaurant.description %></p>
+
+
+<% review = @restaurant.reviews %>
+<% review.each do |review| %>
+  <%= review.thoughts %>
+  <br>
+  <%= "#{review.rating} stars!" %>
+  <br>
+  <br>
+<% end %>
