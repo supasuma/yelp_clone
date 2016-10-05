@@ -22,7 +22,7 @@ feature 'restaurants' do
 
   context 'creating restaurants' do
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
-      visit('/restaurants')
+      signup_user
       click_link('Add a restaurant')
       fill_in('Name', with: 'KFC')
       click_button('Create Restaurant')
@@ -32,7 +32,7 @@ feature 'restaurants' do
 
     context 'an invalid restaurant' do
       scenario 'does not let you submit a name that is too short' do
-        visit('/restaurants')
+        signup_user
         click_link('Add a restaurant')
         fill_in('Name', with: 'kf')
         click_button('Create Restaurant')
@@ -55,7 +55,7 @@ feature 'restaurants' do
   context 'editing restaurants' do
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness!' }
     scenario 'let a user edit a restaurant' do
-      visit('/restaurants')
+      signup_user
       click_link('Edit KFC')
       fill_in('Name', with: 'Kentucky Fried Chicken')
       fill_in('Description', with: 'heart-attack in a bucket')
@@ -70,11 +70,20 @@ feature 'restaurants' do
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness!' }
 
     scenario 'removes restaurant when user clicks delete link' do
-      visit '/restaurants'
+      signup_user
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
     end
+  end
+
+  context 'adding restaurants when logged in' do
+    scenario ' logged out user cannot create restaurant' do
+      visit'/restaurants'
+      click_link 'Add a restaurant'
+      expect(page).to have_content 'Log in'
+    end
+
   end
 
 end
