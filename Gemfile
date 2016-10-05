@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'dotenv-rails'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -14,7 +15,6 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'devise'
-gem 'dotenv'
 gem 'omniauth-facebook'
 
 # Use jquery as the JavaScript library
