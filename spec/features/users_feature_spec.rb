@@ -16,12 +16,7 @@ feature 'User can sign in and out' do
 
    context "user signed in on the homepage" do
      before do
-       visit('/')
-       click_link('Sign up')
-       fill_in('Email', with: 'test@example.com')
-       fill_in('Password', with: 'testtest')
-       fill_in('Password confirmation', with: 'testtest')
-       click_button('Sign up')
+      signup_user
      end
 
      it "should see 'sign out' link" do
@@ -35,4 +30,32 @@ feature 'User can sign in and out' do
        expect(page).not_to have_link('Sign up')
      end
    end
+
+   context "signed in user can create more than one restaurant" do
+     it "can create 2 different restaurants" do
+       signup_user
+       add_kfc_restaurant
+       click_link('Add a restaurant')
+       fill_in('Name', with: 'Dirty Bones')
+       click_button('Create Restaurant')
+       expect(page).to have_content('KFC')
+       expect(page).to have_content('Dirty Bones')
+     end
+   end
+
+   context "user can only edit/delete restaurant, they've created" do
+     before do
+       signup_user
+       add_kfc_restaurant
+       click_link 'Sign out'
+     end
+
+     it "user 2 is not allowed to edit KFC" do
+       signup_user2
+       click_link 'Edit KFC'
+       expect(page).to have_content('error')
+     end
+
+   end
+
 end

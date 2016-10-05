@@ -40,6 +40,15 @@ feature 'restaurants' do
         expect(page).to have_content('error')
       end
     end
+
+    context 'cannot create duplicate restaurant' do
+      scenario 'raises error when user tries to create duplicate' do
+        signup_user
+        add_kfc_restaurant
+        add_kfc_restaurant
+        expect(page).to have_content('Name has already been taken Name')
+      end
+    end
   end
 
   context 'viewing restaurants' do
@@ -83,7 +92,8 @@ feature 'restaurants' do
       click_link 'Add a restaurant'
       expect(page).to have_content 'Log in'
     end
-
   end
+
+
 
 end
