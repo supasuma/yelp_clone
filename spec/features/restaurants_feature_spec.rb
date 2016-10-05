@@ -2,6 +2,14 @@ require 'rails_helper'
 
 feature 'restaurants' do
   context 'no restaurants have been added' do
+    before do
+      visit '/'
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
     scenario 'should display a prompt to add a restaurant' do
       visit('/restaurants')
       expect(page).to have_content('No restaurants yet')
@@ -14,6 +22,7 @@ feature 'restaurants' do
       Restaurant.create(name: 'KFC')
     end
     scenario 'display restaurants' do
+      Capybara.reset_sessions!
       visit('/restaurants')
       expect(page).to have_content('KFC')
       expect(page).not_to have_content('No restaurants yet')
@@ -21,6 +30,14 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
+    before do
+      visit '/'
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
       visit('/restaurants')
       click_link('Add a restaurant')
@@ -28,6 +45,14 @@ feature 'restaurants' do
       click_button('Create Restaurant')
       expect(page).to have_content('KFC')
       expect(current_path).to eq('/restaurants')
+    end
+
+    scenario 'anonymous user is not allowed to create a restaurant' do
+      Capybara.reset_sessions!
+      visit('/restaurants')
+      click_link("Add a restaurant")
+      expect(page).to have_content("You need to sign in or sign up before continuing.")
+
     end
 
     context 'an invalid restaurant' do
@@ -45,6 +70,7 @@ feature 'restaurants' do
   context 'viewing restaurants' do
     let!(:kfc) { Restaurant.create(name: 'KFC') }
     scenario 'lets a user view a restaurant' do
+      Capybara.reset_sessions!
       visit('/restaurants')
       click_link('KFC')
       expect(page).to have_content 'KFC'
@@ -53,7 +79,18 @@ feature 'restaurants' do
   end
 
   context 'editing restaurants' do
-    before { Restaurant.create name: 'KFC', description: 'Deep fried goodness!' }
+    before do
+      visit '/'
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+
+      click_link('Add a restaurant')
+      fill_in('Name', with: 'KFC')
+      click_button('Create Restaurant')
+    end
     scenario 'let a user edit a restaurant' do
       visit('/restaurants')
       click_link('Edit KFC')
@@ -64,11 +101,31 @@ feature 'restaurants' do
       expect(page).to have_content 'heart-attack in a bucket'
       expect(current_path).to eq '/restaurants'
     end
+
+    scenario "user cannot edit a restaurant they haven't added" do
+      Capybara.reset_sessions!
+      visit '/'
+      click_link('Sign up')
+      fill_in('Email', with: 'test1@example.com')
+      fill_in('Password', with: 'happier')
+      fill_in('Password confirmation', with: 'happier')
+      click_button('Sign up')
+      expect(page).to have_content 'KFC'
+      expect(page).not_to have_content 'Edit KFC'
+      expect(page).not_to have_content 'Delete KFC'
+    end
   end
 
   context 'deleting restaurants' do
-    before { Restaurant.create name: 'KFC', description: 'Deep fried goodness!' }
-
+    before do
+      Restaurant.create name: 'KFC', description: 'Deep fried goodness!'
+      visit '/'
+      click_link('Sign up')
+      fill_in('Email', with: 'test@example.com')
+      fill_in('Password', with: 'testtest')
+      fill_in('Password confirmation', with: 'testtest')
+      click_button('Sign up')
+    end
     scenario 'removes restaurant when user clicks delete link' do
       visit '/restaurants'
       click_link 'Delete KFC'
