@@ -4,8 +4,11 @@ require 'helper.rb'
 feature 'restaurants' do
 
   context 'no restaurants have been added' do
+
+    before { User.create email: 'test@test.com', password: 'password' }
+
     scenario 'should display a prompt to add a restaurant' do
-      visit '/restaurants'
+      log_in_1
       expect(page).to have_content 'No restaurants yet'
       expect(page).to have_link 'Add a restaurant'
     end
@@ -28,7 +31,7 @@ feature 'restaurants' do
     before { User.create email: 'test@test.com', password: 'password' }
 
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
-      log_in
+      log_in_1
       click_link 'Add a restaurant'
       fill_in 'Name', with: 'KFC'
       fill_in 'Description', with: 'Chicken-ie'
@@ -83,9 +86,11 @@ feature 'restaurants' do
 
   context 'creating restaurants' do
 
+    before { User.create email: 'test@test.com', password: 'password' }
+
     context 'an invalid restaurant' do
       scenario 'does not let you submit a name that is too short' do
-        visit '/restaurants'
+        log_in_1
         click_link 'Add a restaurant'
         fill_in 'Name', with: 'kf'
         click_button 'Create Restaurant'
@@ -97,7 +102,28 @@ feature 'restaurants' do
 
   context 'a user is limited in actions depending on log in status' do
 
+    scenario 'a user cannot add a restaurant without logging in' do
+      visit '/restaurants'
+      expect(page).not_to have_link 'Add a restaurant'
+    end
 
+    # context 'user is unable to add/delete restaurants that they have not created' do
+    #
+    #   before { User.create email: 'test@test.com', password: 'password' }
+    #   before { User.create email: 'test2@test.com', password: 'password2' }
+    # 
+    #   scenario 'user cannot see edit/delete links to restaurant not created' do
+    #     log_in_1
+    #     click_link 'Add a restaurant'
+    #     fill_in 'Name', with: 'KFC'
+    #     click_button 'Create Restaurant'
+    #     click_link 'Sign out'
+    #     log_in_2
+    #     expect(page).to have_content('KFC')
+    #     expect(page).not_to have_link 'Edit KFC'
+    #     expect(page).not_to have_link 'Delete KFC'
+    #   end
+    # end
   end
 
 end
