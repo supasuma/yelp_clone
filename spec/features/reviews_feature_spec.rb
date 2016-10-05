@@ -13,5 +13,4 @@ feature 'reviewing' do
       expect(current_path).to eq '/restaurants'
       expect(page).to have_content "5 star dining at it's best"
     end
-
   end
