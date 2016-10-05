@@ -26,4 +26,8 @@
   <h1>No restaurants yet</h1>
 <% end %>
 
-<%= link_to "Add a restaurant", new_restaurant_path %>
+<br>
+
+<% if user_signed_in? %>
+  <%= link_to "Add a restaurant", new_restaurant_path %>
+<% end %>
