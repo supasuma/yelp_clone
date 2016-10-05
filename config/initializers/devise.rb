@@ -1,5 +1,6 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+FACEBOOK_CONFIG = YAML.load_file("#{::Rails.root}/facebook_secrets.yml")[::Rails.env]
 Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
@@ -249,7 +250,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   # config.omniauth :facebook, "348815515460917", "3313487a5ec3648a616a80d76e023256"
-  config.omniauth :facebook, "348815515460917", ENV["FACEBOOK_APP_SECRET"]
+  config.omniauth :facebook, FACEBOOK_CONFIG['app_id'], FACEBOOK_CONFIG['secret']
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
