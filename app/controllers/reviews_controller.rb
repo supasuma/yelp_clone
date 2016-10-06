@@ -7,15 +7,24 @@ class ReviewsController < ApplicationController
 
   def create
     @restaurant = Restaurant.find(params[:restaurant_id])
-    @restaurant.reviews.create(review_params)
+    @review = @restaurant.reviews.build_with_user(review_params, current_user)
 
-    redirect_to '/restaurants'
+    if @review.save
+      redirect_to '/restaurants'
+    else
+      if @review.errors[:user]
+        # Note: if you have correctly disabled the review button where appropriate,
+        # this should never happen...
+        redirect_to '/restaurants', alert: 'You have already reviewed this restaurant'
+      else
+        # Why would we render new again?  What else could cause an error?
+        render :new
+      end
+    end
   end
 
   private
-
   def review_params
     params.require(:review).permit(:thoughts, :rating)
   end
-
 end
