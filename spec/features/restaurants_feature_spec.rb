@@ -102,7 +102,7 @@ feature 'restaurants' do
       expect(current_path).to eq '/restaurants'
     end
 
-    xscenario "user cannot edit a restaurant they haven't added" do
+    scenario "user cannot edit a restaurant they haven't added" do
       Capybara.reset_sessions!
       visit '/'
       click_link('Sign up')
