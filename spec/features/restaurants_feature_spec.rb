@@ -103,16 +103,15 @@ feature 'restaurants' do
     end
 
     scenario "user cannot edit a restaurant they haven't added" do
-      Capybara.reset_sessions!
-      visit '/'
+      click_link 'Sign out'
       click_link('Sign up')
       fill_in('Email', with: 'test1@example.com')
       fill_in('Password', with: 'happier')
       fill_in('Password confirmation', with: 'happier')
       click_button('Sign up')
       expect(page).to have_content 'KFC'
-      expect(page).not_to have_content 'Edit KFC'
-      expect(page).not_to have_content 'Delete KFC'
+      click_link 'Edit KFC'
+      expect(page).to have_content 'Sorry, you can only edit your own restaurants'
     end
   end
 
