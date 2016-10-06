@@ -23,3 +23,10 @@ def log_in_2
   fill_in 'Password', with: 'password2'
   click_button 'Log in'
 end
+
+def add_restaurant
+  click_link 'Add a restaurant'
+  fill_in 'Name', with: 'KFC'
+  fill_in 'Description', with: 'Chicken-ie'
+  click_button 'Create Restaurant'
+end
