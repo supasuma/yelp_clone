@@ -75,6 +75,7 @@ feature 'restaurants' do
   context 'deleting restaurants' do
 
     before { User.create email: 'test@test.com', password: 'password' }
+    before { User.create email: 'test2@test.com', password: 'password2'}
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'removes a restaurant when a user clicks a delete link' do
@@ -83,6 +84,14 @@ feature 'restaurants' do
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario 'it can be only deleted by its creator' do
+      log_in_2
+      visit '/restaurants'
+      click_link 'Delete KFC'
+      visit '/restaurants'
+      expect(page).to have_content 'KFC'
     end
 
   end
