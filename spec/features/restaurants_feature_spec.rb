@@ -56,10 +56,11 @@ feature 'restaurants' do
 
   context 'editing restaurants' do
 
+    before { User.create email: 'test@test.com', password: 'password' }
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'let a user edit a restaurant' do
-     visit '/restaurants'
+     log_in_1
      click_link 'Edit KFC'
      fill_in 'Name', with: 'Kentucky Fried Chicken'
      fill_in 'Description', with: 'Deep fried goodness'
@@ -73,9 +74,11 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
 
+    before { User.create email: 'test@test.com', password: 'password' }
     before { Restaurant.create name: 'KFC', description: 'Deep fried goodness' }
 
     scenario 'removes a restaurant when a user clicks a delete link' do
+      log_in_1
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content 'KFC'
@@ -107,23 +110,6 @@ feature 'restaurants' do
       expect(page).not_to have_link 'Add a restaurant'
     end
 
-    # context 'user is unable to add/delete restaurants that they have not created' do
-    #
-    #   before { User.create email: 'test@test.com', password: 'password' }
-    #   before { User.create email: 'test2@test.com', password: 'password2' }
-    # 
-    #   scenario 'user cannot see edit/delete links to restaurant not created' do
-    #     log_in_1
-    #     click_link 'Add a restaurant'
-    #     fill_in 'Name', with: 'KFC'
-    #     click_button 'Create Restaurant'
-    #     click_link 'Sign out'
-    #     log_in_2
-    #     expect(page).to have_content('KFC')
-    #     expect(page).not_to have_link 'Edit KFC'
-    #     expect(page).not_to have_link 'Delete KFC'
-    #   end
-    # end
   end
 
 end
