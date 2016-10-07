@@ -10,5 +10,7 @@
   <br>
   <%= "#{review.rating} stars!" %>
   <br>
-  <br>
+  <% if user_signed_in? && current_user.id == review.user_id  %>
+    <%= link_to "Delete review", restaurant_review_path(review.restaurant_id, review), method: :delete %>
+  <% end %>
 <% end %>

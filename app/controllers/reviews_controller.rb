@@ -23,6 +23,17 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def destroy
+    @review = Review.find(params[:id])
+    if @review.user_id == current_user.id
+      @review.destroy
+      flash[:notice] = 'Review deleted successfully'
+    else
+      flash[:alert] = 'Not allowed'
+    end
+    redirect_to '/restaurants'
+  end
+
   private
   def review_params
     params.require(:review).permit(:thoughts, :rating)
