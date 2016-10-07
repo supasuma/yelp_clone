@@ -38,6 +38,7 @@ describe 'reviews' do
         restaurant = Restaurant.create(name: 'The Ivy')
         expect(restaurant.average_rating).to eq 'N/A'
       end
+    end
 
       context '1 review' do
         it 'returns that rating' do
@@ -55,7 +56,7 @@ describe 'reviews' do
           expect(restaurant.average_rating).to eq 6
         end
       end
-    end
+    
   end
 
 end
